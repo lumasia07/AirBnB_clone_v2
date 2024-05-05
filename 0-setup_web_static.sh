@@ -25,7 +25,8 @@ sudo ln -sf /data/web_static/releases/test /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 
 # Update nginx config to serve /data/web_static/current/ at /hbnb_static
-sudo sed -i '/listen 80 default_server/a location /hbnb_static { alias /data/web_static/current/;}' /etc/nginx/sites-enabled/default
+sudo sed -i '/listen 80 default_server/a location /hbnb_static
+ { alias /data/web_static/current/;}' /etc/nginx/sites-enabled/default
 
 # Restart nginx
 sudo service nginx restart
