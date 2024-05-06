@@ -22,7 +22,8 @@ def do_pack():
     final = local("tar -cvzf {} web_static".format(arch_path))
 
     if final.succeeded:
-        print("web-static packed: {} -> {}Bytes".format(arch_path, os.path.getsize(arch_path)))
+        print("web-static packed: {} -> {}Bytes"
+         .format(arch_path, os.path.getsize(arch_path)))
         return arch_path
     else:
         return None
