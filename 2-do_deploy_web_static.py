@@ -22,7 +22,7 @@ def do_deploy(archive_path):
     tmp_arch_path = "/tmp/{}".format(arch_name)
     put(archive_path, tmp_arch_path)
 
-    relase_folder = "/data/web_static/releases/{}".format(arch_name)
+    release_folder = "/data/web_static/releases/{}".format(arch_name)
     run("mkdir -p {}".format(release_folder))
 
     run("tar -xzf {} -C {}".format(tmp_arch_path, release_folder))
