@@ -1,12 +1,27 @@
 #!/usr/bin/python3
 """Deploy an archive script to web servers"""
 
-from fabric.api import env, run, put
+from fabric.api import env, run, put, local, cd
+from datetime import datetime
 import os
 
 
 env.hosts = ['35.174.185.199', '52.4.81.70']
 env.user = "ubuntu"
+
+def do_pack():
+    """
+    Returns arch path
+    """
+    local("mkdir -p versions")
+    date = datetime.now().strftime("%Y%m%d%H%M%S")
+    file_path = "versions/web_static_{}.tgz".format(date)
+    arch_file = local("tar -cvzf {} web_static".format(file_path))
+
+    if arch_file.succeeded:
+        return file_path
+    else:
+        return None
 
 def do_deploy(archive_path):
     """
@@ -14,29 +29,22 @@ def do_deploy(archive_path):
     Return:
         True if successful, otherwise false
     """
-    if not os.path.exists(archive_path):
-        print("Error: Archive not found".format(archive_path))
-        return False
+    if os.path.exists(archive_path):
+        archived_file = os.path.basename(archive_path)
+        newest_version = "/data/web_static/releases/{}".format(
+            archived_file[:-4])
+        put(archive_path, "/tmp/")
+        run("sudo mkdir -p {}".format(newest_version))
+        with cd(newest_version):
+            run("sudo tar -xzf /tmp/{} -C .".format(archived_file))
+            run("sudo rm /tmp/{}".format(archived_file))
+            run("sudo mv web_static/* .")
+            run("sudo rm -rf web_static")
+            run("sudo rm -rf /data/web_static/current")
+            run("sudo ln -s {} /data/web_static/current".format(newest_version))
 
-    arch_name = os.path.basename(archive_path)
-    tmp_arch_path = "/tmp/{}".format(arch_name)
-    put(archive_path, tmp_arch_path)
+        print("New version deployed!")
+        return True
 
-    release_folder = "/data/web_static/releases/{}".format(arch_name)
-    run("mkdir -p {}".format(release_folder))
-
-    run("tar -xzf {} -C {}".format(tmp_arch_path, release_folder))
-
-    run("rm {}".format(tmp_arch_path))
-
-    extracted = "{}/web_static".format(release_folder)
-    run("mv {}/. {}".format(extracted, release_folder))
-    run("rm -rf {}".format(extracted))
-
-    curr = "/data/web_static/current"
-    run("rm -rf {}".format(curr))
-    run("ln -s {} {}".format(release_folder, curr))
-
-    print("New version deployed!")
-    return True
+    return False
 
