@@ -62,3 +62,7 @@ class FileStorage:
             obj_id = obj.__class__.__name__ + '.' + obj.id
             if obj_id in FileStorage.__objects:
                 del FileStorage.__objects[obj_id]
+
+    def close(self):
+        """De-serialize JSON files to objects"""
+        self.reload()
