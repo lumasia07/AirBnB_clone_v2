@@ -46,7 +46,7 @@ def number_temp(n):
 def is_odd_or_even(n):
     """Number odd or even"""
     if n % 2 == 0:
-        codition = 'even'
+        condition = 'even'
     else:
         condition = 'odd'
     return render_template('6-number_odd_or_even.html', n=n,
