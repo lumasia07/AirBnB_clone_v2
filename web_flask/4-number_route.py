@@ -30,9 +30,11 @@ def default_text(text='is cool'):
     parsed_text = text.replace('_', ' ')
     return "Python {}".format(parsed_text)
 
+
 @app.route('/number/<int:n>', strict_slashes=False)
 def is_number(n):
     return "{:d} is a number".format(n)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
