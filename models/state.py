@@ -19,12 +19,12 @@ class State(BaseModel, Base):
     name = Column(String(128), nullable=False)
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        cities = relationship("City", backref="state", cascade="delete")
+        cities = relationship("City", backref="state", cascade="delete-orphan")
 
     else:
         name: ""
 
-    if getenv('HHBNB_TYPE_STORAGE') != 'db':
+    if getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def cities(self):
             """Getter attribute cities that returns the list of City
