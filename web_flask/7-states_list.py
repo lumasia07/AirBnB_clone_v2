@@ -13,7 +13,10 @@ app = Flask(__name__)
 def states_list():
     """Display HTML for states in alphabetical order"""
     states = storage.all(State)
-    return render_template('7-states_list.html', states=states)
+    all_st = []
+    for key, value in states.items():
+        all_st.append(value)
+    return render_template('7-states_list.html', all_st=all_st)
 
 
 @app.teardown_appcontext
