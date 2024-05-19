@@ -14,7 +14,7 @@ def states_list():
     return render_template('7-states_list.html', states=states)
 
 @app.teardown_appcontext
-def teardoen_db(exception):
+def teardown_db(exception):
     """Closes current SQLAlchemy session"""
     storage.close()
 
