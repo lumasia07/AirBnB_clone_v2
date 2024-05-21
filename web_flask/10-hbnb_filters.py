@@ -4,6 +4,7 @@
 from flask import Flask, render_template
 from models import storage
 from models.state import State
+from models.amenity import Amenity
 
 
 app = Flask(__name__)
@@ -15,14 +16,13 @@ def end_db(exception):
     storage.close()
 
 
-@app.route('/states/', strict_slashes=False)
-@app.route('/states/<id>', strict_slashes=False)
-def states_and_states(id=None):
-    """Display all states"""
-    if id:
-        id = 'State.{}'.format(id)
-    return render_template('9-states.html', states=storage.all(State), id=id)
-
+@app.route('/hbnb_filters', strict_slashes=False)
+def filters():
+    """HBNB filters"""
+    state = storage.all(State)
+    amenities = storage.all(Amenity)
+    return render_template('10-hbnb_filters.html', state=list(state.values()),
+                           amenities=list(amenities.values()))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='5000')
