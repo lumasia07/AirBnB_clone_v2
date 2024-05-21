@@ -9,21 +9,19 @@ from models.state import State
 app = Flask(__name__)
 
 
-@app.route('/states_list', strict_slashes=False)
-def states_list():
-    """Display HTML for states in alphabetical order"""
-    states = storage.all(State)
-    all_st = []
-    for key, value in states.items():
-        all_st.append(value)
-    return render_template('7-states_list.html', all_st=all_st)
-
-
 @app.teardown_appcontext
-def teardown_db(exception):
-    """Closes current SQLAlchemy session"""
+def end_db(exception):
+    """Remove current section"""
     storage.close()
 
 
-if __name__ == '__main__':
+@app.route('/states_list', strict_slashes=False)
+def states_list():
+    """Display all states"""
+    states = storage.all(State)
+    state_list = list(states.values())
+    return render_template('7-states_list.html', states=state_list)
+
+
+if __name__ == "__main__":
     app.run(host='0.0.0.0', port='5000')
