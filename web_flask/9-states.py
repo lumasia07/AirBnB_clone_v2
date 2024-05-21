@@ -15,7 +15,7 @@ def end_db(exception):
     storage.close()
 
 
-@app.route('/cities_by_states', strict_slashes=False)
+@app.route('/states_list', strict_slashes=False)
 def states_list():
     """Display all states"""
     states = storage.all(State)
